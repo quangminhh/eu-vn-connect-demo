@@ -646,7 +646,9 @@ svg.europe .ec.hl,svg.europe .ec.has:hover{stroke:#E5484D}
 .pinfo .chips{margin-top:8px}
 
 /* nhóm theo quốc gia, biểu đồ */
-.cgroup{margin-bottom:22px} .cgroup h3{display:flex;align-items:center;gap:8px;font-size:16px;margin-bottom:10px} .cgroup h3 a{display:inline-flex;align-items:center;gap:8px} .cgroup h3 a:hover{color:var(--blue)} .cgroup h3 .flag{width:24px;height:16px}
+.cgroups{columns:3;column-gap:16px} .main .cgroups{columns:2}
+.cgroup{break-inside:avoid;display:inline-block;width:100%;margin-bottom:22px} .gstack{display:flex;flex-direction:column;gap:12px}
+.catbar.jump .flag{width:18px;height:12px} .cgroup h3{display:flex;align-items:center;gap:8px;font-size:16px;margin-bottom:10px} .cgroup h3 a{display:inline-flex;align-items:center;gap:8px} .cgroup h3 a:hover{color:var(--blue)} .cgroup h3 .flag{width:24px;height:16px}
 .bars{display:flex;flex-direction:column;gap:6px}
 .cbar{display:grid;grid-template-columns:auto 92px 1fr 22px;gap:8px;align-items:center;font-size:12.5px} .bn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
 .bt{height:8px;border-radius:4px;background:var(--soft)} .bt i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#3354E8,#6d86f0)} .cbar b{text-align:right} .cbar:hover .bn{color:var(--blue)}
@@ -664,9 +666,9 @@ svg.europe .ec.hl,svg.europe .ec.has:hover{stroke:#E5484D}
 .art-agri{background:linear-gradient(120deg,#0F3D2E,#1F6B4A 50%,#3354E8)}
 .art-agri i{position:absolute;border-radius:50% 0;border:2px solid rgba(255,255,255,.16);transform:rotate(-20deg)} .art-agri i:nth-child(1){width:220px;height:220px;left:-50px;top:-70px} .art-agri i:nth-child(2){width:160px;height:160px;right:-30px;bottom:-60px;border-color:rgba(233,162,59,.35)} .art-agri i:nth-child(3){width:90px;height:90px;right:30%;top:-40px}
 
-@media (max-width:1100px){.hero .herogrid{grid-template-columns:minmax(0,1fr)} .agrid.four{grid-template-columns:repeat(2,1fr)} .sstrip{grid-template-columns:repeat(4,1fr)} .contgrid{grid-template-columns:repeat(3,1fr)} .ggrid{grid-template-columns:repeat(2,1fr)} .catgrid{grid-template-columns:repeat(3,1fr)} .wlegend{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:1100px){.cgroups{columns:2} .hero .herogrid{grid-template-columns:minmax(0,1fr)} .agrid.four{grid-template-columns:repeat(2,1fr)} .sstrip{grid-template-columns:repeat(4,1fr)} .contgrid{grid-template-columns:repeat(3,1fr)} .ggrid{grid-template-columns:repeat(2,1fr)} .catgrid{grid-template-columns:repeat(3,1fr)} .wlegend{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:860px){
-  .rmap .hint{display:none} .heror{margin-top:6px} .wmap{padding:10px} .hero .quick{display:none} .wl.st-home small{display:none} .hero h1{font-size:30px} .agrid.four{grid-template-columns:1fr}
+  .cgroups,.main .cgroups{columns:1} .rmap .hint{display:none} .heror{margin-top:6px} .wmap{padding:10px} .hero .quick{display:none} .wl.st-home small{display:none} .hero h1{font-size:30px} .agrid.four{grid-template-columns:1fr}
   .wl.st-soon{display:none} .wl{padding:3px 7px} .wl b{font-size:11px} .wl small{font-size:10px}
   .wlegend{grid-template-columns:1fr 1fr} .cchip{padding:6px 8px} .wl.wl-e{transform:translate(-82%,-50%)}
   .sstrip{grid-auto-flow:column;grid-template-columns:none;grid-template-rows:repeat(2,auto);grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px;scrollbar-width:none} .sstrip::-webkit-scrollbar{display:none} .sstrip .cattile{scroll-snap-align:start}
@@ -1625,7 +1627,7 @@ function vNetwork() {
 function vAssoc(id) {
   const a = AS(id); if (!a) return vNotFound();
   const tab = S.tab[a.id] || 'members', evs = EVENTS.filter(e => e.host === a.id), ops = assocOpps(a), fol = S.follow.has(a.id);
-  const body = tab === 'members' ? `${a.members.length ? `<div class="cgrid">${a.members.map(m => coCard(CO(m))).join('')}${a.moreMembers ? `<div class="ccard ghost"><b>${t('moreMembers', { n: a.moreMembers })}</b><small>${esc(L(a.tagline))}</small></div>` : ''}</div>` : ''}${(a.orgs || []).length ? byCountryGroups(a.orgs.map(OG)) : ''}`
+  const body = tab === 'members' ? `${a.members.length ? `<div class="cgrid">${a.members.map(m => coCard(CO(m))).join('')}${a.moreMembers ? `<div class="ccard ghost"><b>${t('moreMembers', { n: a.moreMembers })}</b><small>${esc(L(a.tagline))}</small></div>` : ''}</div>` : ''}${(a.orgs || []).length ? byCountryGroups(a.orgs.map(OG), true) : ''}`
     : tab === 'events' ? `<div class="egrid">${evs.map(evCard).join('')}</div>`
     : tab === 'opps' ? `<div class="olist">${ops.map(oppCard).join('')}</div>`
     : `<div class="lay"><div class="main"><section class="card"><h2>${t('about')}</h2><p class="lead sm">${esc(L(a.about))}</p><h3>${t('focus')}</h3><div class="chips">${a.focus.map(x => `<span class="chip">${esc(L(x))}</span>`).join('')}</div></section></div><aside class="side">${mapCard(a.map, L(a.city))}</aside></div>`;
@@ -1810,10 +1812,11 @@ function orgCard(o) {
     <p class="gabout">${esc(L(o.about))}</p>${o.cats.length ? `<div class="gcats">${o.cats.slice(0, 6).map(catIc).join('')}</div>` : ''}</article>`;
 }
 const orgRow = o => `<a class="grow" href="#/g/${o.id}">${orgLogo(o, 'sm')}<span><b>${esc(o.name)}</b><small>${flag(o.country)}${esc(CN(o.country))} · ${t(KIND[o.kind])}</small></span>${ic('chev')}</a>`;
-function byCountryGroups(list) {
+function byCountryGroups(list, jump = false) {
   const g = {}; list.forEach(o => (g[o.country] = g[o.country] || []).push(o));
-  return Object.entries(g).sort((a, b) => b[1].length - a[1].length || CN(a[0]).localeCompare(CN(b[0])))
-    .map(([k, os]) => `<div class="cgroup"><h3><a href="${kHref(k)}">${flag(k)}${esc(CN(k))}</a><span class="n">${os.length}</span></h3><div class="ggrid">${os.map(orgCard).join('')}</div></div>`).join('');
+  const rows = Object.entries(g).sort((a, b) => b[1].length - a[1].length || CN(a[0]).localeCompare(CN(b[0])));
+  const bar = jump && rows.length > 3 ? `<div class="catbar jump" role="group" aria-label="${t('byCountry')}">${rows.map(([k, os]) => `<button class="fp" data-act="scrollto" data-v="g-${k}">${flag(k)}${esc(CN(k))}<span class="n">${os.length}</span></button>`).join('')}</div>` : '';
+  return `${bar}<div class="cgroups">${rows.map(([k, os]) => `<section class="cgroup" id="g-${k}"><h3><a href="${kHref(k)}">${flag(k)}${esc(CN(k))}</a><span class="n">${os.length}</span></h3><div class="gstack">${os.map(orgCard).join('')}</div></section>`).join('')}</div>`;
 }
 function countryBars(list) {
   const g = {}; list.forEach(o => g[o.country] = (g[o.country] || 0) + 1);
