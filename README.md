@@ -1,4 +1,4 @@
-# EU–VN Connect — interactive demo
+# Global Connect — interactive demo
 
 Live: https://quangminhh.github.io/eu-vn-connect-demo/
 
